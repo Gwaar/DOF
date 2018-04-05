@@ -9,10 +9,10 @@ namespace RPG.Weapon
     public class Weapon : ScriptableObject 
 
     {
-        
 
-    
 
+
+        public bool isLeftHand = false;
         public              Transform       WeaponGrip          =   null;       
         public              Transform       SheathTransform     = null;
 
@@ -26,8 +26,19 @@ namespace RPG.Weapon
         [SerializeField]       AnimationClip UnSeathAnimation;
 
 
+        [SerializeField] float minTimeBetweenHit = 2f;
+        [SerializeField] float maxattackRange = 2f;
 
-        
+
+        public float GetMinTimeBetweenHits()
+        {
+            return minTimeBetweenHit;
+        }
+        public float GetMaxAttackRange()
+        {
+            return maxattackRange;
+        }
+
 
 
 
@@ -37,6 +48,13 @@ namespace RPG.Weapon
         {
             return weaponPrefab;
         }
+
+
+
+
+
+
+
         public  AnimationClip GetAttackAnimClip()
         {
             //  removeAnimationEvents();  

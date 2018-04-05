@@ -10,14 +10,12 @@ namespace RPG.CameraUI
 
     {
 
-        [SerializeField]
-        Texture2D walkCursor = null;
+
         [SerializeField]
         Texture2D unknownCursor = null;
+
         [SerializeField]
         Texture2D targetCursor = null;
-        [SerializeField]
-        Vector2 cursorHotspot = new Vector2(96, 96);
 
         [SerializeField]
         const int walkableLayerNumber = 8;
@@ -30,24 +28,26 @@ namespace RPG.CameraUI
         void Start()
         {
             cameraRaycaster = GetComponent<CameraRaycaster>();
-            cameraRaycaster.notifyLayerChangeObservers += OnLayerChanged; // register ourself
+          //  cameraRaycaster.notifyLayerChangeObservers += OnLayerChanged; // register ourself
         }
 
-        void OnLayerChanged(int newLayer)
-        {
-           
-            switch (newLayer)
-            {
-                case walkableLayerNumber:
-                    Cursor.SetCursor(walkCursor, cursorHotspot, CursorMode.Auto);
-                    break;
-                case enemybleLayerNumber:
-                    Cursor.SetCursor(targetCursor, cursorHotspot, CursorMode.Auto);
-                    break;
-                default:
-                    Cursor.SetCursor(unknownCursor, cursorHotspot, CursorMode.Auto);
-                    return;
-            }
-        }
+       
     }
+    //void OnLayerChanged(int newLayer)
+    //{
+
+    //    switch (newLayer)
+    //    {
+    //        case walkableLayerNumber:
+
+    //            break;
+    //        case enemybleLayerNumber:
+    //            Cursor.SetCursor(targetCursor, cursorHotspot, CursorMode.Auto);
+    //            break;
+    //        default:
+    //            Cursor.SetCursor(unknownCursor, cursorHotspot, CursorMode.Auto);
+    //            return;
+    //    }
+    //    }
+    //}
 }

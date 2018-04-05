@@ -1,8 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿
 using UnityEngine;
 using UnityEngine.UI;
-using RPG.CameraUI;
+//using RPG.CameraUI;
 
 
 
@@ -12,50 +11,56 @@ namespace RPG.Character
 
     public class Energy : MonoBehaviour
     {
-        [SerializeField]  RawImage EnergyBar;
-        [SerializeField] float MaxEnergyPoint = 100f;
-        [SerializeField] int pointsOfEnergyPerHit = 10;
+        [SerializeField]        RawImage            EnergyBar;
+        [SerializeField]        float               MaxEnergyPoint              = 100f;
+        [SerializeField]        int                 pointsOfEnergyPerHit        = 10;
 
-
-
-       public float currentEnergyPoints;
-        CameraRaycaster cameraRayCaster;
-
+        public                  float               currentEnergyPoints;
+                                CameraRaycaster     cameraRaycaster;
+  
 
         // Use this for initialization
         void Start()
         {
-            cameraRayCaster = Camera.main.GetComponent<CameraRaycaster>();
-            currentEnergyPoints = MaxEnergyPoint;
-
-            cameraRayCaster.notifyRightClickObservers += ProcessRightClick;
+            cameraRaycaster                         = Camera.main.GetComponent<CameraRaycaster>()   ;
+            currentEnergyPoints                     = MaxEnergyPoint                                ;   
+            cameraRaycaster.onOverPotentiallyEnemy += OnOverPotentiallyEnemy;
 
         }
 
-        // Update is called once per frame
+        //------------------------------------------------------------------------------------------//
+        //     if player click on Enemy with the <Enemy>() script attatched                         //
+        //------------------------------------------------------------------------------------------//
+        void OnOverPotentiallyEnemy(Enemy enemy)
+        {
+            if (Input.GetMouseButtonDown(1))
+            {
+                UpdateEnergyBar();
+                UpdateEnergyPoints();
+            }
+        }
+        //------------------------------------------------------------------------------------------//
+        //      Updates Enery Bar after clicked on enemy                                            //
+        //------------------------------------------------------------------------------------------//
+
+        private void UpdateEnergyBar()
+        {
+            float newEnergyPoint    = currentEnergyPoints - pointsOfEnergyPerHit;
+            currentEnergyPoints     = Mathf.Clamp(newEnergyPoint, 0, MaxEnergyPoint);
+        }
+      
         void Update()
         {
-
-            UpdateEnergyPoints();
-        }
-
-        void ProcessRightClick ( RaycastHit raycastHit,int layerhit)
-        {
-            float newEnergyPoint = currentEnergyPoints - pointsOfEnergyPerHit;
-            currentEnergyPoints = Mathf.Clamp(newEnergyPoint, 0, MaxEnergyPoint);
-         
             UpdateEnergyPoints();
         }
 
         private void UpdateEnergyPoints()
-        {
-            
-            float xValue = -(EnergyAsProcent() / 2f) - 0.5f;
-            EnergyBar.uvRect = new Rect(xValue, 0f, 0.5f, 1f);
+        {         
+            float xValue        =           -(EnergyAsProcent() / 2f) - 0.5f;
+            EnergyBar.uvRect    = new       Rect(xValue, 0f, 0.5f, 1f);
         }
-        float EnergyAsProcent()
-        {
-          
+        float       EnergyAsProcent()
+        {       
             return currentEnergyPoints / MaxEnergyPoint;
         }
     }

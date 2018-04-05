@@ -1794,7 +1794,7 @@ Animator:
   m_GameObject: {fileID: 1843721108530132}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 5ea35bec77f9e6145b5c818e3c989e59, type: 3}
-  m_Controller: {fileID: 9100000, guid: 493749c4deeaddb49a785d9174905443, type: 2}
+  m_Controller: {fileID: 22100000, guid: 3b65a24dc7622f848857a5e976abfdbf, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 1
@@ -1857,8 +1857,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: beb75cb33cc6f884db40fe6cec105d9e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  walkMoveStopRadius: 0.2
-  AttackMoveStopRadius: 5
   isWalking: 0
 --- !u!114 &114524711673422882
 MonoBehaviour:
@@ -1905,13 +1903,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 604b141a2b5e268458bd1db30ada661b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weaponToInstasiate: {fileID: 11400000, guid: ca949ecfa6a5c59488e3cb52d11b1020, type: 2}
   enemyLayer: 9
   DMGpertHit: 9
-  minTimeBetweenHit: 2
-  maxattackRange: 2
   animatorOverrideController: {fileID: 22100000, guid: 3b65a24dc7622f848857a5e976abfdbf,
     type: 2}
+  weaponInUse: {fileID: 0}
+  onWeaponChange: 0
   maxHealthpoints: 100
 --- !u!114 &114705266949661912
 MonoBehaviour:
@@ -1946,7 +1943,6 @@ SkinnedMeshRenderer:
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -1962,7 +1958,6 @@ SkinnedMeshRenderer:
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
-  m_StitchLightmapSeams: 0
   m_SelectedEditorRenderState: 3
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5

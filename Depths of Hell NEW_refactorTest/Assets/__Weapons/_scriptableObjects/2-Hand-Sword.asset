@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3eedadb860bf16746bfd33b81b606b99, type: 3}
+  m_Name: TwoHandedSword
+  m_EditorClassIdentifier: 
+  WeaponGrip: {fileID: 4935503026637156, guid: 95f06d213e8eb8643b873bce8cf5a61f, type: 2}
+  SheathTransform: {fileID: 4035709734523596, guid: 33a2dc6c43b3e4142bd2eb3c13544cb5,
+    type: 2}
+  weaponPrefab: {fileID: 1292087405759528, guid: 0ad4362c24b2c394dabfc762177b637d,
+    type: 2}
+  attackAnimation: {fileID: 7400000, guid: dce280ced5e006c4cb0eb0fab2f51b75, type: 3}
+  idleAnimation: {fileID: 7400000, guid: 35e0cbee51cb8194cb51d64396cc3b64, type: 3}
+  WalkAnimation: {fileID: 7400000, guid: 3c23279e3e02346458b3f82bb43abf94, type: 3}
+  RunAnimation: {fileID: 7400000, guid: 0000872662c8fb241bf2ab6cc00dd461, type: 3}
+  SeathAnimation: {fileID: 7400000, guid: 4638ca7fe98a28044a1dd9205af58dea, type: 3}
+  UnSeathAnimation: {fileID: 7400000, guid: f95c96d798bb3b14c8087b88ad5c9f5d, type: 3}

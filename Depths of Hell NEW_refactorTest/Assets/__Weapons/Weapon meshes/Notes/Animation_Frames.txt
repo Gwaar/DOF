@@ -1,4 +1,0 @@
-Demon Staff
-
-Frames 1-45 Laugh
-Frames 46-120 Look around
