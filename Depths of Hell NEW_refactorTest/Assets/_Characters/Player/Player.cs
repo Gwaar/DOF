@@ -52,13 +52,16 @@ namespace RPG.Character
         AnimationEvent ae = new AnimationEvent();
         private void Start()
         {
-            OverrideWeaponAnimatorController();
-           // InstantiateInhand();
-           // InstantiateInSheath();
-         //   ResetAnimController();
-
-           // InstantiateInhand();
           
+
+            OverrideWeaponAnimatorController();
+            // InstantiateInhand();
+            InstantiateInhand();
+            print(_weapon.name);
+            //   ResetAnimController();
+
+            // InstantiateInhand();
+
 
             RegisterForMouseClick();
         
@@ -102,17 +105,17 @@ namespace RPG.Character
 
 
 
-        //private void InstantiateInhand()
-        //{
-        //    var weaponPrefab = weaponToInstasiate.GetWeaponPreFab();
-        //    GameObject Hand = RequestHandTransform();
-        //    var weapon = Instantiate(weaponPrefab, Hand.transform);
-        //    _weapon = weapon;
-        //    SetParentHand(Hand, weapon);
+        private void InstantiateInhand()
+        {
+            var weaponPrefab = weaponToInstasiate.GetWeaponPreFab();
+            GameObject Hand = RequestHandTransform();
+            var weapon = Instantiate(weaponPrefab, Hand.transform);
+            _weapon = weapon;
+            SetParentHand(Hand, weapon);
 
 
-            
-       // }
+
+        }
 
         private void  InstantiateInSheath()
         {
@@ -131,20 +134,22 @@ namespace RPG.Character
         {
 
            
-            weapon.transform.localPosition  = weaponToInstasiate.WeaponGrip.localPosition;
+             weapon.transform.localPosition  = weaponToInstasiate.WeaponGrip.localPosition;
             weapon.transform.localRotation  = weaponToInstasiate.WeaponGrip.localRotation;
             weapon.transform.localScale     = weaponToInstasiate.WeaponGrip.localScale;
 
 
+            print(weaponToInstasiate.WeaponGrip.localRotation);
 
 
 
 
-          //  
             weapon.transform.SetParent(Hand.transform);
+           
 
 
-          
+
+
         }
 
         private void SetParentSeath(GameObject Sheath, GameObject weapon)
@@ -155,8 +160,8 @@ namespace RPG.Character
             weapon.transform.localRotation = weaponToInstasiate.SheathTransform.localRotation;
             weapon.transform.localScale =    weaponToInstasiate.SheathTransform.localScale;
 
+            print(_weapon.name);
 
-            _weapon = weapon;
             weapon.transform.SetParent(Sheath.transform);
 
 
@@ -167,7 +172,10 @@ namespace RPG.Character
         {
             var RightHand = GetComponentsInChildren<FindRightHandOfPlayer>();
             int numberOfDominantHands = RightHand.Length;
+
+            print(RightHand[0].gameObject.name);
             return RightHand[0].gameObject;
+            
         }
 
         private GameObject RequestSheathTransform()
@@ -215,7 +223,8 @@ namespace RPG.Character
         {
          //  
             SetParentHand(RequestHandTransform(), _weapon);
-       
+          //  SetParentHand(RequestHandTransform(), _weapon);
+
         }
 
         public void SheathMoment()
