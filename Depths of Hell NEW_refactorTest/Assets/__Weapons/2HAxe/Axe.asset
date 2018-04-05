@@ -11,6 +11,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3eedadb860bf16746bfd33b81b606b99, type: 3}
   m_Name: Axe
   m_EditorClassIdentifier: 
+  isLeftHand: 1
   WeaponGrip: {fileID: 4864292684806084, guid: 2f389b17e2ca8e447b80d96eefb5fe2d, type: 2}
   SheathTransform: {fileID: 4037991204092922, guid: 58a3df811d201204f8118e2c291d90fb,
     type: 2}
@@ -21,3 +22,5 @@ MonoBehaviour:
   RunAnimation: {fileID: 7400000, guid: 81ab5976dd7b302458e91569714fd735, type: 3}
   SeathAnimation: {fileID: 7400000, guid: 166b0c1eb92bef242afb8b58b4769773, type: 3}
   UnSeathAnimation: {fileID: 7400000, guid: 7bd1cbaed89606444a440dfadd052f7c, type: 3}
+  minTimeBetweenHit: 2
+  maxattackRange: 2

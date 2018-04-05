@@ -68,7 +68,7 @@ Animator:
   m_GameObject: {fileID: 149790}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 1e242c2f7a6a5cd45a2ba556010a0512, type: 3}
-  m_Controller: {fileID: 9100000, guid: 493749c4deeaddb49a785d9174905443, type: 2}
+  m_Controller: {fileID: 0}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 1
@@ -2286,11 +2286,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 604b141a2b5e268458bd1db30ada661b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wepaonInUse: {fileID: 11400000, guid: 454f2470224e94e4ea5726975f31f464, type: 2}
   enemyLayer: 9
   DMGpertHit: 9
-  minTimeBetweenHit: 2
-  maxattackRange: 2
+  animatorOverrideController: {fileID: 0}
+  weaponInUse: {fileID: 0}
+  onWeaponChange: 0
   maxHealthpoints: 100
 --- !u!114 &114801124403779446
 MonoBehaviour:
@@ -2394,8 +2394,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: beb75cb33cc6f884db40fe6cec105d9e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  walkMoveStopRadius: 0.2
-  AttackMoveStopRadius: 5
   isWalking: 0
 --- !u!137 &137030852979763254
 SkinnedMeshRenderer:
@@ -2427,6 +2425,7 @@ SkinnedMeshRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
+  m_SortingLayer: 0
   m_SortingOrder: 0
   serializedVersion: 2
   m_Quality: 0
@@ -2535,6 +2534,7 @@ SkinnedMeshRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
+  m_SortingLayer: 0
   m_SortingOrder: 0
   serializedVersion: 2
   m_Quality: 0
@@ -2643,6 +2643,7 @@ SkinnedMeshRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
+  m_SortingLayer: 0
   m_SortingOrder: 0
   serializedVersion: 2
   m_Quality: 0
@@ -2751,6 +2752,7 @@ SkinnedMeshRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
+  m_SortingLayer: 0
   m_SortingOrder: 0
   serializedVersion: 2
   m_Quality: 0
@@ -2859,6 +2861,7 @@ SkinnedMeshRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
+  m_SortingLayer: 0
   m_SortingOrder: 0
   serializedVersion: 2
   m_Quality: 0
@@ -2944,6 +2947,7 @@ NavMeshAgent:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 149790}
   m_Enabled: 1
+  m_AgentTypeID: 0
   m_Radius: 0.54
   m_Speed: 4
   m_Acceleration: 4
@@ -2982,7 +2986,7 @@ Canvas:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1759575628071874}
   m_Enabled: 1
-  serializedVersion: 2
+  serializedVersion: 3
   m_RenderMode: 0
   m_Camera: {fileID: 0}
   m_PlaneDistance: 100
@@ -2991,6 +2995,7 @@ Canvas:
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
+  m_AdditionalShaderChannelsFlag: 25
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0

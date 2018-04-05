@@ -11,61 +11,37 @@ using RPG.Weapon;
 
 
 namespace RPG.Character
-{
-    
+
+
+{    
     public class Player : MonoBehaviour, IDamageable
     {
-      
-        GameObject _weapon;
- 
-        [SerializeField]
-        Weapon.Weapon weaponToInstasiate = null;
+
      
-
-
-        [SerializeField]
-        int enemyLayer = 9;
-        [SerializeField]
-        float DMGpertHit = 9;
-        [SerializeField]
-        float minTimeBetweenHit = 2f;
-        [SerializeField]
-        float maxattackRange = 2f;
-
-
-
-
+        [SerializeField]        int                         enemyLayer                  = 9;
+        [SerializeField]        float                       DMGpertHit                  = 9;
        
+        [SerializeField]        AnimatorOverrideController  animatorOverrideController  = null;
+        [SerializeField]        Weapon.Weapon               weaponInUse          = null;
+       
+        public                  bool                        onWeaponChange              = false;       
+                                float                       LastHitTime                 = 0f;
+                                GameObject                  _weapon                     = null;        
+                                CameraRaycaster             cameraRaycaster;
+        AnimationEvent                                      ae                          = new AnimationEvent();
 
-        [SerializeField]
-        AnimatorOverrideController animatorOverrideController = null;
+         Animator               animator;
 
 
-        bool weaponEquipped = false;
 
-
-        Animator anim;
-
-        CameraRaycaster cameraRaycaster;
-        float LastHitTime = 0f;
-
-        AnimationEvent ae = new AnimationEvent();
         private void Start()
         {
-            OverrideWeaponAnimatorController();
-           // InstantiateInhand();
-           // InstantiateInSheath();
-         //   ResetAnimController();
-
-           // InstantiateInhand();
-          
-
+            ResetAnimController();
+            InstantiateInSheath();
+            animatorOverrideController["DEFAULT_IDLE"] = null;
             RegisterForMouseClick();
-        
-            anim = GetComponent<Animator>();
-
-            SetCurrentMaxHealth();
-            cameraRaycaster.notifyMouseClickObservers += OnMouseClicked;
+            animator = GetComponent<Animator>();
+            SetCurrentMaxHealth();          
 
         }
         private void SetCurrentMaxHealth()
@@ -78,97 +54,87 @@ namespace RPG.Character
             var animator = GetComponent<Animator>();
             animator.runtimeAnimatorController = animatorOverrideController;
       
-               animatorOverrideController["DEFAULT_ATTACK"] = weaponToInstasiate.GetAttackAnimClip();
-               animatorOverrideController["DEFAULT_IDLE"] = weaponToInstasiate.GetIdleAnimClip(); // remove const
-               animatorOverrideController["DEFAULT_WALK"] = weaponToInstasiate.GetWalkAnimClip();
-               animatorOverrideController["DEFAULT_RUN"] = weaponToInstasiate.GetRunAnimClip();   
-               animatorOverrideController["DEFAULT_SHEATH"] = weaponToInstasiate.GetSeathAnimation();
+               animatorOverrideController["DEFAULT_ATTACK"] = weaponInUse.GetAttackAnimClip();
+               animatorOverrideController["DEFAULT_IDLE"] = weaponInUse.GetIdleAnimClip(); // remove const
+               animatorOverrideController["DEFAULT_WALK"] = weaponInUse.GetWalkAnimClip();
+               animatorOverrideController["DEFAULT_RUN"] = weaponInUse.GetRunAnimClip();   
+               animatorOverrideController["DEFAULT_SHEATH"] = weaponInUse.GetSeathAnimation();
         }
+      
 
         private void ResetAnimController()
         {
-
             var animator = GetComponent<Animator>();
             animator.runtimeAnimatorController = animatorOverrideController;
 
             animatorOverrideController["DEFAULT_ATTACK"] = null;
-            animatorOverrideController["DEFAULT_IDLE"] = null; // remove const
+            animatorOverrideController["DEFAULT_IDLE"] = null; 
             animatorOverrideController["DEFAULT_WALK"] = null;
-            animatorOverrideController["DEFAULT_RUN"] = null;
-           // animatorOverrideController["DEFAULT_SHEATH"] = null;
+            animatorOverrideController["DEFAULT_RUN"] = null;         
         }
 
+        private void InstantiateInhand()
+        {
+            var weaponPrefab = weaponInUse.GetWeaponPreFab();
+            GameObject Hand = RequestRHandTransform();
+            var weapon = Instantiate(weaponPrefab, Hand.transform);
+            _weapon = weapon;
+            SetParentHand(Hand, weapon);
 
-
-
-
-        //private void InstantiateInhand()
-        //{
-        //    var weaponPrefab = weaponToInstasiate.GetWeaponPreFab();
-        //    GameObject Hand = RequestHandTransform();
-        //    var weapon = Instantiate(weaponPrefab, Hand.transform);
-        //    _weapon = weapon;
-        //    SetParentHand(Hand, weapon);
-
-
-            
-       // }
+        }
 
         private void  InstantiateInSheath()
         {
-            var weaponPrefab = weaponToInstasiate.GetWeaponPreFab();
+            var weaponPrefab = weaponInUse.GetWeaponPreFab();
             GameObject Sheath = RequestSheathTransform();
             var weapon = Instantiate(weaponPrefab, Sheath.transform);
               _weapon = weapon;
-            SetParentSeath(Sheath, weapon);
-
-
-            
+            SetParentSheath(Sheath, weapon);
+ 
         }
-       
+        private void ResetWeapon()
+        {
+            ResetAnimController();
+            Destroy(_weapon);         
+            InstantiateInSheath();
+        }
 
         private void SetParentHand(GameObject Hand, GameObject weapon)
         {
 
-           
-            weapon.transform.localPosition  = weaponToInstasiate.WeaponGrip.localPosition;
-            weapon.transform.localRotation  = weaponToInstasiate.WeaponGrip.localRotation;
-            weapon.transform.localScale     = weaponToInstasiate.WeaponGrip.localScale;
-
-
-
-
-
-
-          //  
             weapon.transform.SetParent(Hand.transform);
+            weapon.transform.localPosition  = weaponInUse.WeaponGrip.localPosition;
+            weapon.transform.localRotation  = weaponInUse.WeaponGrip.localRotation;
+            weapon.transform.localScale     = weaponInUse.WeaponGrip.localScale;
 
-
-          
         }
 
-        private void SetParentSeath(GameObject Sheath, GameObject weapon)
+
+        private void SetParentSheath(GameObject Sheath, GameObject weapon)
         {
-
-          
-            weapon.transform.localPosition = weaponToInstasiate.SheathTransform.localPosition;
-            weapon.transform.localRotation = weaponToInstasiate.SheathTransform.localRotation;
-            weapon.transform.localScale =    weaponToInstasiate.SheathTransform.localScale;
-
-
-            _weapon = weapon;
             weapon.transform.SetParent(Sheath.transform);
-
+            weapon.transform.localPosition  = weaponInUse.SheathTransform.localPosition;
+            weapon.transform.localRotation  = weaponInUse.SheathTransform.localRotation;
+            weapon.transform.localScale     = weaponInUse.SheathTransform.localScale;
+            _weapon = weapon;
 
         }
 
-
-        private GameObject RequestHandTransform()
+        private GameObject RequestRHandTransform()
         {
             var RightHand = GetComponentsInChildren<FindRightHandOfPlayer>();
             int numberOfDominantHands = RightHand.Length;
             return RightHand[0].gameObject;
         }
+        private GameObject RequestLHandTransform()
+        {
+            var LeftHand = GetComponentsInChildren<FindLeftHandOfPlayer>();
+            int numberOfDominantHands = LeftHand.Length;
+            return LeftHand[0].gameObject;
+        }
+
+
+
 
         private GameObject RequestSheathTransform()
         {
@@ -182,49 +148,91 @@ namespace RPG.Character
         private void RegisterForMouseClick()
         {
             cameraRaycaster = FindObjectOfType<CameraRaycaster>();
+            cameraRaycaster.onOverPotentiallyEnemy += OnOverPotentiallyEnemy;
+
         }
+
+
+        void OnOverPotentiallyEnemy(Enemy enemy)
+        {
+
+            if (Input.GetMouseButtonDown(0))
+            {
+                animator.SetTrigger("UnSheath");
+            }
+
+
+            if (Input.GetMouseButtonDown(0) && IsTargetinRange(enemy.gameObject))
+            {
+                AttackTarget(enemy);
+            }
+          
+                
+        }
+
+        private bool IsTargetinRange(GameObject target)
+        {
+            float   distanceTotarget = (target.transform.position - transform.position).magnitude;
+            return  (distanceTotarget <= weaponInUse.GetMaxAttackRange());
+        }
+       
         [SerializeField]
         float maxHealthpoints = 100f;
         float currenthHealthPoints;
+
+
         public float healthAsPercentage { get { return currenthHealthPoints / (maxHealthpoints); } }
         public void TakeDamage(float damage)
         {
             currenthHealthPoints = Mathf.Clamp(currenthHealthPoints - damage, 0f, maxHealthpoints);
         }
-        void OnMouseClicked(RaycastHit raycastHit, int layerHit)
-        {
-            if (layerHit == 9)
+        //void OnMouseClicked(RaycastHit raycastHit, int layerHit)
+        //{
+        //    if (layerHit == 9)
+        //    {
+        //        var enemy = raycastHit.collider.gameObject;
+        //        if ((enemy.transform.position - transform.position).magnitude > maxattackRange)
+        //        {return; }        
+        //    }
+        //}
+      
+
+        private void AttackTarget(Enemy enemy)
+        {      
+            if (Time.time - LastHitTime > weaponInUse.GetMinTimeBetweenHits())
             {
-                var enemy = raycastHit.collider.gameObject;
-
-                if ((enemy.transform.position - transform.position).magnitude > maxattackRange)
-                {
-                    return;
-                }
-
-                var enemyComponent = enemy.GetComponent<Enemy>();
-                if (Time.time - LastHitTime > minTimeBetweenHit)
-                {
-                    enemyComponent.TakeDamage(DMGpertHit);
-                    LastHitTime = Time.time;
-                }
+                animator.SetTrigger("Attack");
+                enemy.TakeDamage(DMGpertHit);
+                LastHitTime = Time.time;
             }
         }
-      
+
         public void UnSheathMoment()
         {
-         //  
-            SetParentHand(RequestHandTransform(), _weapon);
-       
+            OverrideWeaponAnimatorController();
+            SetParentHand(RequestRHandTransform(), _weapon);
+            onWeaponChange = false;
         }
 
         public void SheathMoment()
+        {         
+            SetParentSheath(RequestSheathTransform(), _weapon);
+            ResetAnimController();
+            onWeaponChange = true;
+        }
+        public void OnValidate()
         {
+            if (onWeaponChange == true)
+            {
+                ResetWeapon();
+            }
+          
            
-            SetParentSeath(RequestSheathTransform(), _weapon);
-        }   
+        }
 
-  
+
+
+
     }
 }
     
