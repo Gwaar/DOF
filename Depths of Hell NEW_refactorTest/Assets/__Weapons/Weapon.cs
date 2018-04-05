@@ -9,9 +9,9 @@ namespace RPG.Weapon
     public class Weapon : ScriptableObject 
 
     {
+        
 
-
-        public bool isWeaponSeathed;
+    
 
         public              Transform       WeaponGrip          =   null;       
         public              Transform       SheathTransform     = null;
@@ -25,9 +25,9 @@ namespace RPG.Weapon
         [SerializeField]       AnimationClip SeathAnimation;
         [SerializeField]       AnimationClip UnSeathAnimation;
 
+
+
         
-
-
 
 
 
@@ -78,12 +78,11 @@ namespace RPG.Weapon
         {
             return UnSeathAnimation;
         }
-        
 
 
 
 
-}
+    }
 }
 
     
