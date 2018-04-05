@@ -8,71 +8,50 @@ using RPG.Character; // so can detect by type;
 public class CameraRaycaster : MonoBehaviour
 {
 
-    [SerializeField]
-    Texture2D unknownCursor = null;
+    //------------------------------------------------------------------------------------------//
+    //      SerializeField                                                                      //
+    //------------------------------------------------------------------------------------------//
 
-    [SerializeField]
-    Texture2D targetCursor = null;
-
-
-    [SerializeField]
-    Texture2D walkCursor = null;
-
-    [SerializeField]
-    Vector2 cursorHotspot = new Vector2(96, 96);
-
+    [SerializeField]    Texture2D   unknownCursor   = null               ;
+    [SerializeField]    Texture2D   targetCursor    = null               ;
+    [SerializeField]    Texture2D   walkCursor      = null               ;
+    [SerializeField]    Vector2     cursorHotspot   = new Vector2(96, 96);
+    //------------------------------------------------------------------------------------------//
+    //      Constants                                                                           //
+    //------------------------------------------------------------------------------------------//
 
     const int   POTENTIALLY_WALKABLE_LAYER_NUMBER   = 8 ;
-    const int   POTENTIALLY_ENEMY_LAYER_NUMBER      = 9 ; 
+    const int   POTENTIALLY_ENEMY_LAYER_NUMBER      = 9 ;
 
 
-
-
-    // INSPECTOR PROPERTIES RENDERED BY CUSTOM EDITOR SCRIPT
+    //------------------------------------------------------------------------------------------//
+    //     Layer Prios                                                                          //
+    //------------------------------------------------------------------------------------------//
     [SerializeField] int[] layerPriorities = null;
 
-    float maxRaycastDepth = 100f; // Hard coded value
-	int topPriorityLayerLastFrame = -1; // So get ? from start with Default layer terrain
+    float       maxRaycastDepth             = 100f; 
+	int         topPriorityLayerLastFrame   = -1;
+    //------------------------------------------------------------------------------------------//
+    //      Sets Delegates for other classes                                                    //
+    //------------------------------------------------------------------------------------------//
 
-	// Setup delegates for broadcasting layer changes to other classes
-    public delegate void OnCursorLayerChange(int newLayer); // declare new delegate type
-    public event OnCursorLayerChange notifyLayerChangeObservers; // instantiate an observer set
+   // public      delegate void OnCursorLayerChange(int newLayer)      ;
 
+    public      delegate void OnOverPotentiallyEnemy(Enemy enemy)    ;
+    public      event OnOverPotentiallyEnemy onOverPotentiallyEnemy  ;
 
-
-
-    public delegate void OnOverPotentiallyEnemy(Enemy enemy);
-    public event OnOverPotentiallyEnemy onOverPotentiallyEnemy;
-
-
-    public delegate void OnOverPotentiallyWalkable(Vector3 destination);
-    public event OnOverPotentiallyWalkable onOverPotentiallyWalkable;
-
-    //REMOVE
-    public delegate void OnClickPriorityLayer(RaycastHit raycastHit, int layerHit); // declare new delegate type
-    //REMOVE                                                                               //REMOVE
-    public event OnClickPriorityLayer notifyMouseClickObservers; // instantiate an observer set
-    //REMOVE
-    
-    public delegate void OnRightClick(RaycastHit raycastHit, int layerHit); // declare new delegate type
-    //REMOVE
-    public event OnRightClick notifyRightClickObservers; // instantiate an observer set
-    //REMOVE
+    public      delegate void OnOverPotentiallyWalkable(Vector3 destination);
+    public      event OnOverPotentiallyWalkable onOverPotentiallyWalkable;
 
 
+    //------------------------------------------------------------------------------------------//
+    //     Check if pointer is over an Ui element                                               //
+    //------------------------------------------------------------------------------------------//
     void Update()
-    {
-        // Check if pointer is over an interactable UI element
-        if (EventSystem.current.IsPointerOverGameObject())
-        {
-           
-        }
-        else
-        {
-            PreforemRayCasts();
-        }
+    {      
+        if (EventSystem.current.IsPointerOverGameObject())        {}        else       { PreforemRayCasts();       }    }
 
-    }
+
     void PreforemRayCasts()
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -96,17 +75,20 @@ public class CameraRaycaster : MonoBehaviour
         }
         return false;
     }
-
+    //------------------------------------------------------------------------------------------//
+    //     Check if target is Walkable                                                          //
+    //------------------------------------------------------------------------------------------//
     private bool RaycastForPotentionallyWalkable(Ray ray)
     {
-        RaycastHit hitinfo;
-        LayerMask potatiallyWalkableLayer = 1 << POTENTIALLY_WALKABLE_LAYER_NUMBER;
+        RaycastHit  hitinfo;
+        LayerMask   potatiallyWalkableLayer = 1 << POTENTIALLY_WALKABLE_LAYER_NUMBER;
 
-        bool potentiallyWalkableHit = Physics.Raycast(ray, out hitinfo, maxRaycastDepth, potatiallyWalkableLayer);
-        if (potentiallyWalkableHit)
+        bool        potentiallyWalkableHit  = Physics.Raycast(ray, out hitinfo, maxRaycastDepth, potatiallyWalkableLayer);
+        if         (potentiallyWalkableHit)
         {
-            Cursor.SetCursor(walkCursor, cursorHotspot, CursorMode.Auto);
-            onOverPotentiallyWalkable(hitinfo.point);
+            Cursor.SetCursor            (walkCursor, cursorHotspot, CursorMode.Auto);
+            onOverPotentiallyWalkable   (hitinfo.point);
+
             return true;
         }
 

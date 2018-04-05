@@ -23,7 +23,7 @@ GameObject:
   - component: {fileID: 23260175908101578}
   - component: {fileID: 95962217957771944}
   m_Layer: 0
-  m_Name: OneHandedSword
+  m_Name: TwoHandedSword
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

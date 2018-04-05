@@ -20,7 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4037991204092922}
   m_Layer: 0
-  m_Name: AxeSheath
+  m_Name: 2hand-Axe-Sheath
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

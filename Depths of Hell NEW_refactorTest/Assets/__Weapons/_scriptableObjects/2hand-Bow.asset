@@ -9,15 +9,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3eedadb860bf16746bfd33b81b606b99, type: 3}
-  m_Name: Bow
+  m_Name: 2hand-Bow
   m_EditorClassIdentifier: 
+  isLeftHand: 0
   WeaponGrip: {fileID: 4214445089658944, guid: 82bfc96e9027ecd47b08939a242723cd, type: 2}
   SheathTransform: {fileID: 4795577198521860, guid: b6e1cf9cd1fe4554ea420071ef868e4f,
     type: 2}
+  minTimeBetweenHit: 2
+  maxattackRange: 2
   weaponPrefab: {fileID: 100002, guid: 1327a533c1a4fae41beddfa6bfc3a8a7, type: 2}
   attackAnimation: {fileID: 7400000, guid: 24d693751e9fd0b42ba8f9595d8b5f5e, type: 3}
   idleAnimation: {fileID: 7400000, guid: 601ee7f1bd0dfcc45b53cb118d6d3e58, type: 3}
   WalkAnimation: {fileID: 7400000, guid: 0ddeadfa9fe0f9b4293bbb380f9aa884, type: 3}
   RunAnimation: {fileID: 7400000, guid: f8e0a3512fe05e240bf9d4cff6d8fc26, type: 3}
   SeathAnimation: {fileID: 7400000, guid: 7b29b750b13c2764aaf3c057976a752e, type: 3}
-  UnSeathAnimation: {fileID: 7400000, guid: fa43b8e3a4edbaf4588b0a302e16c0f6, type: 3}
+  UnSheathAnimation: {fileID: 0}
