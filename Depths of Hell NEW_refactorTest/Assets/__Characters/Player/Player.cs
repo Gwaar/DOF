@@ -96,7 +96,12 @@ namespace RPG.Character
             var             weapon          = Instantiate(weaponPrefab, Hand.transform) ;
                             _weapon         = weapon                                    ;
 
+
+           
+
             SetParentHand(Hand, weapon);
+            animator.SetBool("WeaponSheathed", false);
+            animator.SetBool("WeaponDrawn", true);
         }
         //------------------------------------------------------------------------------------------//
         //Instaniate Weapon in Sheath and set parent to Spine 2                                     //
@@ -109,8 +114,13 @@ namespace RPG.Character
             var             weapon          = Instantiate(weaponPrefab, Sheath.transform)   ;
                             _weapon         = weapon;
 
+
+
             SetParentSheath(Sheath, weapon);
- 
+
+            animator.SetBool("WeaponSheathed", true);
+            animator.SetBool("WeaponDrawn", false);
+
         }
         //------------------------------------------------------------------------------------------//
         //      Reset Animations and Destroy Weapon                                                 //
@@ -230,7 +240,9 @@ namespace RPG.Character
         //------------------------------------------------------------------------------------------//
         public void UnSheathMoment()
         {
+            
             OverrideWeaponAnimatorController();
+            
             SetParentHand(RequestRHandTransform(), _weapon);
             onWeaponChange = false;
         }
