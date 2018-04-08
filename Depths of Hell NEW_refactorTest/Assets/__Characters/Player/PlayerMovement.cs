@@ -71,15 +71,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
-        if(Input.GetKey("1"))
-        animator.SetTrigger("Attack");
-        if (Input.GetKey("2"))
-            
-
-
-          
-        animator.SetTrigger("UnSeath");
-        if (Input.GetKey("3"))
+        
             animator.SetTrigger("Seath");
        // playerSpeed = WalkSpeed;
         playerSpeed =  animator.GetFloat("SpeedProcent");

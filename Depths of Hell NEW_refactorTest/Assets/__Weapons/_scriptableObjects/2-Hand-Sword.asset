@@ -20,7 +20,7 @@ MonoBehaviour:
   weaponPrefab: {fileID: 1292087405759528, guid: 0ad4362c24b2c394dabfc762177b637d,
     type: 2}
   attackAnimation: {fileID: 7400000, guid: dce280ced5e006c4cb0eb0fab2f51b75, type: 3}
-  idleAnimation: {fileID: 7400000, guid: 35e0cbee51cb8194cb51d64396cc3b64, type: 3}
+  idleAnimation: {fileID: 7400000, guid: 8370b4128ccb08c4a8944d3f0d66cebc, type: 3}
   WalkAnimation: {fileID: 7400000, guid: 3c23279e3e02346458b3f82bb43abf94, type: 3}
   RunAnimation: {fileID: 7400000, guid: 0000872662c8fb241bf2ab6cc00dd461, type: 3}
   SeathAnimation: {fileID: 7400000, guid: 4638ca7fe98a28044a1dd9205af58dea, type: 3}

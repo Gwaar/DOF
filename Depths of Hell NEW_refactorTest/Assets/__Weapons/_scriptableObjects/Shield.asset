@@ -11,8 +11,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3eedadb860bf16746bfd33b81b606b99, type: 3}
   m_Name: Shield
   m_EditorClassIdentifier: 
-  isLeftHand: 0
-  WeaponGrip: {fileID: 0}
+  isLeftHand: 1
+  isOneHand: 1
+  WeaponGrip: {fileID: 4477416540211590, guid: cd30161c1be26454cae056d943a44739, type: 2}
   SheathTransform: {fileID: 4621431076646076, guid: cddc62cdbb0d2b64f9a4cfd1320f6660,
     type: 2}
   minTimeBetweenHit: 2
@@ -23,4 +24,4 @@ MonoBehaviour:
   WalkAnimation: {fileID: 7400000, guid: b46a2a0672a3293429397c821ca298b7, type: 3}
   RunAnimation: {fileID: 7400000, guid: fdecf33786dedc840986e0f03698b81b, type: 3}
   SeathAnimation: {fileID: 7400000, guid: 2f2d8cb70810b294f87921e753089496, type: 3}
-  UnSheathAnimation: {fileID: 0}
+  UnSheathAnimation: {fileID: 7400000, guid: 504e43b388fb23b47aa45ce1751b1b0c, type: 3}

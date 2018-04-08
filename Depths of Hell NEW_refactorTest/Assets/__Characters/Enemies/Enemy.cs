@@ -7,61 +7,104 @@ using UnityStandardAssets.Characters.ThirdPerson;
 public class Enemy : MonoBehaviour, IDamageable
 {
 
-    [SerializeField]    float attackRadius      = 5f;
-    [SerializeField]    float MoveRadius        = 2f;
-    [SerializeField]    float DMGperShot        = 7f;
-    [SerializeField]    float SecBetweenShots   = 7f;
-    [SerializeField]    float maxHealthpoints   = 100f;
 
-    [SerializeField]   GameObject Projectile;
-    [SerializeField]   GameObject ProjectileSocket;
+    [SerializeField]
+    float attackRadius = 5f;
+    [SerializeField]
+    float MoveRadius = 2f;
+    [SerializeField]
+    float DMGperShot = 7f;
+    [SerializeField]
+    float SecBetweenShots = 2f;
+    [SerializeField]
+    float maxHealthpoints = 100f;
 
-    [SerializeField]    Vector3 aimOffset = new Vector3(0, 1f, 0);
+
+
+
+
+
+    [SerializeField]
+    AnimatorOverrideController animatorOverrideController = null;
+    AnimationEvent ae = new AnimationEvent();
+    Animator animator;    
+    [SerializeField]
+    float DMGpertHit = 9;
+    [SerializeField]
+    EnemyWeapon enemyWeapon = null;
+
+
+
+
+    [SerializeField]
+    Transform waypoint;
+
+    [SerializeField]
+    GameObject Projectile;
+    [SerializeField]
+    GameObject ProjectileSocket;
+
+    [SerializeField]
+    Vector3 aimOffset = new Vector3(0, 1f, 0);
 
     bool isAttacking = false;
     float currenthHealthPoints;
 
-    
+
     ThirdPersonCharacter thirdPersonCharacter = null;
-    AICharacterControl aiCharacterControl = null; 
+    AICharacterControl aiCharacterControl = null;
 
     GameObject player = null;
-     
-    public float healthAsPercentage { get { return currenthHealthPoints/(maxHealthpoints); }}
 
-   void Start()
+    public float healthAsPercentage { get { return currenthHealthPoints / (maxHealthpoints); } }
+
+    void Start()
     {
+        ResetAnimController();
+
+
+        OverrideWeaponAnimatorController_Combat();
+
+
+
+
         currenthHealthPoints = maxHealthpoints;
         aiCharacterControl = GetComponent<AICharacterControl>();
         thirdPersonCharacter = GetComponent<ThirdPersonCharacter>();
         player = GameObject.FindGameObjectWithTag("Player");
 
-
+       
     }
 
     void Update()
     {
         float distanceToPlayer = Vector3.Distance(player.transform.position, transform.position);
-        if (distanceToPlayer <= attackRadius&& !isAttacking)
+        if (distanceToPlayer <= attackRadius && !isAttacking)
         {
-            isAttacking = true;
-            InvokeRepeating("FireProjectile", 0f, SecBetweenShots);
-       
+
+            
+            //animatorOverrideController["DEFAULT_ATTACK"] = enemyWeapon.GetCombatState_AttackAnimation();
+            //isAttacking = true;
+            InvokeRepeating("FireProjectile", 1f, SecBetweenShots);
+           
+
         }
         if (distanceToPlayer <= MoveRadius)
         {
+            
             aiCharacterControl.SetTarget(player.transform);
+
         }
         else
         {
-            aiCharacterControl.SetTarget(transform);
+            aiCharacterControl.SetTarget(waypoint.transform);
         }
     }
 
     public void TakeDamage(float damage)
     {
         currenthHealthPoints = Mathf.Clamp(currenthHealthPoints - damage, 0f, maxHealthpoints);
-        if (currenthHealthPoints<= 0) { Destroy(gameObject); }
+        if (currenthHealthPoints <= 0) { Destroy(gameObject); }
     }
 
     private void OnDrawGizmos()
@@ -76,12 +119,58 @@ public class Enemy : MonoBehaviour, IDamageable
     // Set out fire logic!!!!
     void FireProjectile()
     {
-        GameObject      newProjectile                    =      Instantiate(Projectile, ProjectileSocket.transform.position, Quaternion.identity);        
-        Projectile      projectileComponent              =      newProjectile.GetComponent<Projectile>();
-        projectileComponent.SetShooter(gameObject);                 
-        projectileComponent.damageCaused                 =      DMGperShot;
-        Vector3 unitVectorToPlayer                       =      (player.transform.position + aimOffset - ProjectileSocket.transform.position).normalized;
-        float projectileSpeed                            =      projectileComponent.GetDefaultLaunchSpeed();
-        newProjectile.GetComponent<Rigidbody>().velocity =      unitVectorToPlayer * projectileSpeed;
+        print("called");
+
+        animator.SetTrigger("Attack");
+
+
+        //GameObject newProjectile = Instantiate(Projectile, ProjectileSocket.transform.position, Quaternion.identity);
+        //Projectile projectileComponent = newProjectile.GetComponent<Projectile>();
+        //projectileComponent.SetShooter(gameObject);
+        //projectileComponent.damageCaused = DMGperShot;
+        //Vector3 unitVectorToPlayer = (player.transform.position + aimOffset - ProjectileSocket.transform.position).normalized;
+        //float projectileSpeed = projectileComponent.GetDefaultLaunchSpeed();
+        //newProjectile.GetComponent<Rigidbody>().velocity = unitVectorToPlayer * projectileSpeed;
     }
+    private void IdleState_OverrideWeaponAnimatorController()
+    {
+
+        var animator = GetComponent<Animator>();
+        animator.runtimeAnimatorController = animatorOverrideController;
+
+        animatorOverrideController["DEFAULT_ATTACK"]        = enemyWeapon.GetCombatState_AttackAnimation();
+        animatorOverrideController["DEFAULT_IDLE"]          = enemyWeapon.GetIdleState_IdleAnimClip();
+        animatorOverrideController["DEFAULT_WALK"]          = enemyWeapon.GetIdleState_WalkAnimClip();
+        animatorOverrideController["DEFAULT_RUN"]     = enemyWeapon.GetIdleState_WalkAnimClip();
+       
+      //  animatorOverrideController["DEFAULT_SHEATH"] = enemyWeapon.GetSeathAnimation();
+    }
+    private void OverrideWeaponAnimatorController_Combat()
+    {
+
+        var animator = GetComponent<Animator>();
+        animator.runtimeAnimatorController = animatorOverrideController;
+
+        animatorOverrideController["DEFAULT_ATTACK"]    = enemyWeapon.GetCombatState_AttackAnimation();
+        animatorOverrideController["DEFAULT_IDLE"]      = enemyWeapon.GetCombatStrate_IdleAnimation();
+        animatorOverrideController["DEFAULT_WALK"]      = enemyWeapon.GetCombatState_WalkAnimation();
+        animatorOverrideController["DEFAULT_RUN"]       = enemyWeapon.GetCombatState_RunAnimation();
+       
+    }
+
+
+
+    private void ResetAnimController()
+    {
+        var animator = GetComponent<Animator>();
+        animator.runtimeAnimatorController = animatorOverrideController;
+
+        animatorOverrideController["DEFAULT_ATTACK"] = null;
+        animatorOverrideController["DEFAULT_IDLE"] = null;
+        animatorOverrideController["DEFAULT_WALK"] = null;
+        animatorOverrideController["DEFAULT_RUN"] = null;
+    }
+ 
+
+
 }

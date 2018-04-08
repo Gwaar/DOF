@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3eedadb860bf16746bfd33b81b606b99, type: 3}
+  m_Name: 1handSword
+  m_EditorClassIdentifier: 
+  isLeftHand: 0
+  isOneHand: 1
+  WeaponGrip: {fileID: 4240903256377684, guid: c8139681ffc499f49aa62cfabcd07e97, type: 2}
+  SheathTransform: {fileID: 4974130096627736, guid: 6f2c6efe61c06d14bb2378cc51b1c7fc,
+    type: 2}
+  minTimeBetweenHit: 2
+  maxattackRange: 2
+  weaponPrefab: {fileID: 100002, guid: a6ba87c23848d6049a0c5f100fe53eb6, type: 2}
+  attackAnimation: {fileID: 7400000, guid: 96f8270c0e4678d4580d41b43babe823, type: 3}
+  idleAnimation: {fileID: 7400000, guid: f6cee4b116817bd439a3c2a645702d15, type: 3}
+  WalkAnimation: {fileID: 7400000, guid: bc0ed20b42a890b4da206b1bc5f61b73, type: 3}
+  RunAnimation: {fileID: 7400000, guid: fdecf33786dedc840986e0f03698b81b, type: 3}
+  SeathAnimation: {fileID: 0}
+  UnSheathAnimation: {fileID: 7400000, guid: 1976ddf3df1791c4e8c25d71f8f925ee, type: 3}

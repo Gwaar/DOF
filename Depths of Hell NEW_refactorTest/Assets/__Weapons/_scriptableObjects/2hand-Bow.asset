@@ -11,8 +11,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3eedadb860bf16746bfd33b81b606b99, type: 3}
   m_Name: 2hand-Bow
   m_EditorClassIdentifier: 
-  isLeftHand: 0
-  WeaponGrip: {fileID: 4214445089658944, guid: 82bfc96e9027ecd47b08939a242723cd, type: 2}
+  isLeftHand: 1
+  isMainHand: 0
+  isOffhand: 0
+  WeaponGrip: {fileID: 4214445089658944, guid: a38eed7a88493ad4f878b6f3591a0c80, type: 2}
   SheathTransform: {fileID: 4795577198521860, guid: b6e1cf9cd1fe4554ea420071ef868e4f,
     type: 2}
   minTimeBetweenHit: 2

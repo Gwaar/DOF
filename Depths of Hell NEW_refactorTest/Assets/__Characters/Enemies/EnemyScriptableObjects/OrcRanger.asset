@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b44f81ea21586e43b796eb1bbabd665, type: 3}
+  m_Name: OrcRanger
+  m_EditorClassIdentifier: 
+  TransformToInstansiate: {fileID: 0}
+  minTimeBetweenHit: 2
+  maxattackRange: 2
+  EnemyPrefabtoInstansiate: {fileID: 0}
+  Idlestate_IdleAnimation: {fileID: 7400002, guid: b9b5ccf4cb59624449bb4707598e3692,
+    type: 3}
+  IdleState_WalkAnimation: {fileID: 7400006, guid: b9b5ccf4cb59624449bb4707598e3692,
+    type: 3}
+  IdleState_SocialAnimation: {fileID: 7400002, guid: b9b5ccf4cb59624449bb4707598e3692,
+    type: 3}
+  CombatState_AttackAnimation: {fileID: 7400008, guid: b9b5ccf4cb59624449bb4707598e3692,
+    type: 3}
+  CombatStrate_IdleAnimation: {fileID: 7400002, guid: b9b5ccf4cb59624449bb4707598e3692,
+    type: 3}
+  CombatState_WalkAnimation: {fileID: 7400006, guid: b9b5ccf4cb59624449bb4707598e3692,
+    type: 3}
+  CombatState_RunAnimation: {fileID: 7400004, guid: b9b5ccf4cb59624449bb4707598e3692,
+    type: 3}
+  CombatState_AggroAnimation: {fileID: 0}

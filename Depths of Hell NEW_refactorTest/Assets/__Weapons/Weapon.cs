@@ -10,6 +10,13 @@ namespace   RPG.Weapon
     public class Weapon : ScriptableObject 
     {
         public              bool                                                    isLeftHand              = false ;
+ 
+        public              bool                                                    isOneHand               = false;
+
+
+
+
+
         public              Transform                                               WeaponGrip              = null  ;       
         public              Transform                                               SheathTransform         = null  ;
         [SerializeField]    float                                                   minTimeBetweenHit       = 2f    ;

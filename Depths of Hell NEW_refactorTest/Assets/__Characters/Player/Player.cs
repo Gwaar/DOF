@@ -11,7 +11,7 @@ using RPG.Weapon;
 
 
 namespace RPG.Character
-{    
+{
     public class Player : MonoBehaviour, IDamageable
     {
 
@@ -19,85 +19,168 @@ namespace RPG.Character
         //          SerializeField                                                                  //
         //------------------------------------------------------------------------------------------// 
 
-        [SerializeField]       float                        maxHealthpoints             = 100f                  ;                             
-        [SerializeField]        float                       DMGpertHit                  = 9                     ;       
-        [SerializeField]        AnimatorOverrideController  animatorOverrideController  = null                  ;
-        [SerializeField]        Weapon.Weapon               weaponInUse                 = null                  ;
+        [SerializeField]
+        float maxHealthpoints = 100f;
+        [SerializeField]
+        float DMGpertHit = 9;
+        [SerializeField]
+        AnimatorOverrideController animatorOverrideController = null;
+        [SerializeField]
+        Weapon.Weapon weaponInUse = null;
+        [SerializeField]
+        Weapon.Weapon OffHandWeaponInUse = null;
+
 
         //------------------------------------------------------------------------------------------//
         //          Public Variables                                                                //
         //------------------------------------------------------------------------------------------//    
-        public                  bool                        onWeaponChange              = false                 ;
-                       
+        public bool onWeaponChange = false;
+        
+
+
+
+
         //------------------------------------------------------------------------------------------//
         //         Private Variables                                                                //
         //------------------------------------------------------------------------------------------//                      
-                                float                       LastHitTime                 = 0f;
-                                GameObject                  _weapon                     = null                  ;        
-                                CameraRaycaster             cameraRaycaster                                     ;
-                                AnimationEvent              ae                          = new AnimationEvent()  ;
-                                float                       currenthHealthPoints                                ;
+        float LastHitTime = 0f;
+        GameObject _weapon = null;
 
-                                Animator                    animator                                            ;
+        GameObject _OffHand = null;
+
+
+        CameraRaycaster cameraRaycaster;
+        AnimationEvent ae = new AnimationEvent();
+        float currenthHealthPoints;
+
+        Animator animator;
+
+
+        bool OffHandUnsheath = false;
+        bool mainHandUnSheath = true;
 
         //------------------------------------------------------------------------------------------//
         //        Sets Health, ResetAnimarions, Instansiate Weapon in Sheath, sets Idle Animation   //
         //------------------------------------------------------------------------------------------// 
 
         private void Start()
-        {         
-            SetCurrentMaxHealth()   ;
-            ResetAnimController()   ;
-            InstantiateInSheath()   ;          
-            RegisterForMouseClick() ;
-            animator                                    = GetComponent<Animator>();        
-            animatorOverrideController["DEFAULT_IDLE"]  = null;
+        {
+            ResetAnimController();
+            animatorOverrideController["DEFAULT_UNSHEATH_OFFHAND"]  = OffHandWeaponInUse.GetUnSeathAnimation();
+            animatorOverrideController["DEFAULT_UNSHEATH"]          = weaponInUse.GetUnSeathAnimation();
+           
+            SetCurrentMaxHealth();
+          
+            InstantiateInSheath();
+            RegisterForMouseClick();
+            animator = GetComponent<Animator>();
+            animatorOverrideController["DEFAULT_IDLE"] = null;
+
+           
+
+
+
         }
         private void SetCurrentMaxHealth()
         {
-            currenthHealthPoints      = maxHealthpoints;
+            currenthHealthPoints = maxHealthpoints;
         }
         //------------------------------------------------------------------------------------------//
         //          Ovverides Animations to "in combat" Animations                                  //
         //------------------------------------------------------------------------------------------//
         private void OverrideWeaponAnimatorController()
         {
-
-            var      animator         = GetComponent<Animator>();
+           
+            var animator = GetComponent<Animator>();
             animator.runtimeAnimatorController = animatorOverrideController;
-      
-               animatorOverrideController["DEFAULT_ATTACK"] = weaponInUse.GetAttackAnimClip()   ;
-               animatorOverrideController["DEFAULT_IDLE"]   = weaponInUse.GetIdleAnimClip()     ; 
-               animatorOverrideController["DEFAULT_WALK"]   = weaponInUse.GetWalkAnimClip()     ;
-               animatorOverrideController["DEFAULT_RUN"]    = weaponInUse.GetRunAnimClip()      ;   
-               animatorOverrideController["DEFAULT_SHEATH"] = weaponInUse.GetSeathAnimation()   ;
+
+            if (weaponInUse.isOneHand == false)
+            {
+                animatorOverrideController["DEFAULT_ATTACK"] = weaponInUse.GetAttackAnimClip();
+                animatorOverrideController["DEFAULT_IDLE"] = weaponInUse.GetIdleAnimClip();
+                animatorOverrideController["DEFAULT_WALK"] = weaponInUse.GetWalkAnimClip();
+                animatorOverrideController["DEFAULT_RUN"] = weaponInUse.GetRunAnimClip();
+                animatorOverrideController["DEFAULT_SHEATH"] = weaponInUse.GetSeathAnimation();
+
+            }
+            else
+            {
+                
+                if (mainHandUnSheath == true)
+                {
+
+                    print("mainHandAnims!");
+
+                    animatorOverrideController["DEFAULT_ATTACK"] = weaponInUse.GetAttackAnimClip();
+                    animatorOverrideController["DEFAULT_IDLE"] = weaponInUse.GetIdleAnimClip();
+                    animatorOverrideController["DEFAULT_WALK"] = weaponInUse.GetWalkAnimClip();
+                    animatorOverrideController["DEFAULT_RUN"] = weaponInUse.GetRunAnimClip();
+              //      animatorOverrideController["DEFAULT_SHEATH"] = weaponInUse.GetSeathAnimation();
+                    animatorOverrideController["DEFAULT_UNSHEATH_OFFHAND"] = OffHandWeaponInUse.GetUnSeathAnimation();
+                    animatorOverrideController["DEFAULT_UNSHEATH"] = weaponInUse.GetUnSeathAnimation();
+
+                    mainHandUnSheath = false;
+                }
+          
+  
+               else
+                {
+                    
+                    if (OffHandUnsheath == false)
+                    {
+                        print("offhandAnims");
+                    //    ResetAnimController();
+                        animatorOverrideController["DEFAULT_ATTACK"] = OffHandWeaponInUse.GetAttackAnimClip();
+                        animatorOverrideController["DEFAULT_IDLE"] = OffHandWeaponInUse.GetIdleAnimClip();
+                        animatorOverrideController["DEFAULT_WALK"] = OffHandWeaponInUse.GetWalkAnimClip();
+                        animatorOverrideController["DEFAULT_RUN"] = OffHandWeaponInUse.GetRunAnimClip();
+                        animatorOverrideController["DEFAULT_UNSHEATH"] = OffHandWeaponInUse.GetUnSeathAnimation();
+                        animatorOverrideController["DEFAULT_UNSHEATH_OFFHAND"] = OffHandWeaponInUse.GetUnSeathAnimation();
+                        //       animatorOverrideController["DEFAULT_SHEATH"] = OffHandWeaponInUse.GetSeathAnimation();
+
+
+                        OffHandUnsheath = true;
+                    }
+                
+          
+                }
+
+            }
+
+        
+         
+
+
+
+
         }
+
 
         //------------------------------------------------------------------------------------------//
         //       Reset Animation Controller to "out of combat" Animations                           //
         //------------------------------------------------------------------------------------------//
         private void ResetAnimController()
         {
-            var animator                        = GetComponent<Animator>()  ;
-            animator.runtimeAnimatorController  = animatorOverrideController;
+            var animator = GetComponent<Animator>();
+            animator.runtimeAnimatorController = animatorOverrideController;
 
-            animatorOverrideController["DEFAULT_ATTACK"]    = null          ;
-            animatorOverrideController["DEFAULT_IDLE"]      = null          ; 
-            animatorOverrideController["DEFAULT_WALK"]      = null          ;
-            animatorOverrideController["DEFAULT_RUN"]       = null          ;         
+            animatorOverrideController["DEFAULT_ATTACK"] = null;
+            animatorOverrideController["DEFAULT_IDLE"] = null;
+            animatorOverrideController["DEFAULT_WALK"] = null;
+            animatorOverrideController["DEFAULT_RUN"] = null;
         }
         //------------------------------------------------------------------------------------------//
         //      Instaniate Weapon in Hand  & Set Parent to Hanb                                           //
         //------------------------------------------------------------------------------------------//
         private void InstantiateInhand()
         {
-            var             weaponPrefab    = weaponInUse.GetWeaponPreFab()             ;
-            GameObject      Hand            = RequestRHandTransform()                   ;
-            var             weapon          = Instantiate(weaponPrefab, Hand.transform) ;
-                            _weapon         = weapon                                    ;
+            var weaponPrefab = weaponInUse.GetWeaponPreFab();
+            GameObject Hand = RequestRHandTransform();
+            var weapon = Instantiate(weaponPrefab, Hand.transform);
+            _weapon = weapon;
 
 
-           
+
 
             SetParentHand(Hand, weapon);
             animator.SetBool("WeaponSheathed", false);
@@ -107,50 +190,122 @@ namespace RPG.Character
         //Instaniate Weapon in Sheath and set parent to Spine 2                                     //
         //------------------------------------------------------------------------------------------//
 
-        private void  InstantiateInSheath()
+        private void InstantiateInSheath()
         {
-            var             weaponPrefab    = weaponInUse.GetWeaponPreFab()                 ;
-            GameObject      Sheath          = RequestSheathTransform()                      ;
-            var             weapon          = Instantiate(weaponPrefab, Sheath.transform)   ;
-                            _weapon         = weapon;
+
+            if (weaponInUse.isOneHand == false)
+            {
+                var weaponPrefab = weaponInUse.GetWeaponPreFab();
+
+                GameObject Sheath = RequestSheathTransform();
+
+                var weapon = Instantiate(weaponPrefab, Sheath.transform);
+                _weapon = weapon;
+
+
+                SetParentSheath(Sheath, weapon);
+
+                animator.SetBool("WeaponSheathed", true);
+                animator.SetBool("WeaponDrawn", false);
+
+            }
+            else
+            {
+                var weaponPrefab = weaponInUse.GetWeaponPreFab();
+                var OffhandWeaponInUse = OffHandWeaponInUse.GetWeaponPreFab();
+
+                GameObject Sheath = RequestSheathTransform();
+
+                var weapon = Instantiate(weaponPrefab, Sheath.transform);
+                var offhand = Instantiate(OffhandWeaponInUse, Sheath.transform);
+                _weapon = weapon;
+                _OffHand = offhand;
+
+                SetParentSheathOffHand(Sheath, offhand);
+                SetParentSheath(Sheath, weapon);
+               
+
+                animator.SetBool("WeaponSheathed", true);
+                animator.SetBool("WeaponDrawn", false);
 
 
 
-            SetParentSheath(Sheath, weapon);
 
-            animator.SetBool("WeaponSheathed", true);
-            animator.SetBool("WeaponDrawn", false);
+            }
+
+
+
 
         }
+
         //------------------------------------------------------------------------------------------//
         //      Reset Animations and Destroy Weapon                                                 //
         //------------------------------------------------------------------------------------------//
-        private void ResetWeapon()
+        private void OnWeaponSwap()
         {
-            ResetAnimController();
-            Destroy     (_weapon);         
-            InstantiateInSheath();
+
+           
+            if (weaponInUse.isOneHand == false)
+            {
+                ResetAnimController();
+                Destroy(_weapon);
+                InstantiateInSheath();
+            }
+            else
+            {
+                ResetAnimController();
+                Destroy(_weapon);
+                Destroy(_OffHand);
+                InstantiateInSheath();
+                InstantiateInSheath();
+            }
+
         }
         //------------------------------------------------------------------------------------------//
         //       Sets Parent to Weapon                                                              //
         //------------------------------------------------------------------------------------------//
 
-        private void SetParentHand      (GameObject     Hand, GameObject    weapon)
+        private void SetParentHand(GameObject Hand, GameObject weapon)
         {
             weapon.transform.SetParent(Hand.transform);
-            weapon.transform.localPosition  = weaponInUse.WeaponGrip.localPosition  ;
-            weapon.transform.localRotation  = weaponInUse.WeaponGrip.localRotation  ;
-            weapon.transform.localScale     = weaponInUse.WeaponGrip.localScale     ;
+            weapon.transform.localPosition = weaponInUse.WeaponGrip.localPosition;
+            weapon.transform.localRotation = weaponInUse.WeaponGrip.localRotation;
+            weapon.transform.localScale = weaponInUse.WeaponGrip.localScale;
         }
-        private void SetParentSheath    (GameObject     Sheath, GameObject      weapon)
+        private void SetParentSheath(GameObject Sheath, GameObject weapon)
         {
+
             weapon.transform.SetParent(Sheath.transform);
-            weapon.transform.localPosition  = weaponInUse.SheathTransform.localPosition ;
-            weapon.transform.localRotation  = weaponInUse.SheathTransform.localRotation ;
-            weapon.transform.localScale     = weaponInUse.SheathTransform.localScale    ;
-                                    _weapon = weapon;
+            weapon.transform.localPosition = weaponInUse.SheathTransform.localPosition;
+            weapon.transform.localRotation = weaponInUse.SheathTransform.localRotation;
+            weapon.transform.localScale = weaponInUse.SheathTransform.localScale;
+            _weapon = weapon;
 
         }
+
+
+        private void SetParentSheathOffHand(GameObject Sheath, GameObject Offhand)
+        {
+
+            Offhand.transform.SetParent(Sheath.transform);
+            Offhand.transform.localPosition =   OffHandWeaponInUse.SheathTransform.localPosition;
+            Offhand.transform.localRotation =   OffHandWeaponInUse.SheathTransform.localRotation;
+            Offhand.transform.localScale    =   OffHandWeaponInUse.SheathTransform.localScale;
+            _OffHand = Offhand;
+
+        }
+        private void SetParentHandOffHand(GameObject Sheath, GameObject Offhand)
+        {
+
+            Offhand.transform.SetParent(Sheath.transform);
+            Offhand.transform.localPosition = OffHandWeaponInUse.WeaponGrip.localPosition;
+            Offhand.transform.localRotation = OffHandWeaponInUse.WeaponGrip.localRotation;
+            Offhand.transform.localScale = OffHandWeaponInUse.WeaponGrip.localScale;
+            print("gotHere!");
+
+        }
+
+
         //------------------------------------------------------------------------------------------//
         //      Finds Transform to set Weapon Parent                                                //
         //------------------------------------------------------------------------------------------//
@@ -159,7 +314,7 @@ namespace RPG.Character
         {
             var         RightHand               = GetComponentsInChildren<FindRightHandOfPlayer>();
             int         numberOfDominantHands   = RightHand.Length;
-          
+            print("RightHandSet");
             return      RightHand[0].gameObject;
             
         }
@@ -168,9 +323,9 @@ namespace RPG.Character
             var         LeftHand                = GetComponentsInChildren<FindLeftHandOfPlayer>();
             int         numberOfDominantHands   = LeftHand.Length;
 
+
             return          LeftHand[0].gameObject;
-        }
-      
+        }      
         private GameObject RequestSheathTransform()
         {
             var                 SheathLocation  = GetComponentsInChildren<FindSeathTransform>() ;
@@ -242,10 +397,32 @@ namespace RPG.Character
         {
             
             OverrideWeaponAnimatorController();
-            
-            SetParentHand(RequestRHandTransform(), _weapon);
-            onWeaponChange = false;
+
+            if(weaponInUse.isLeftHand == true)
+            {
+                    
+                    SetParentHand(RequestLHandTransform(), _weapon);
+                    onWeaponChange = false;
+            }
+            else
+            {
+                print("RighHandSet");
+                SetParentHand(RequestRHandTransform(), _weapon);
+                onWeaponChange = false;
+            }       
         }
+
+        public void UnSheathOffHandMoment()
+        {
+            SetParentHandOffHand(RequestLHandTransform(), _OffHand);
+
+        }
+
+
+
+
+
+
         //------------------------------------------------------------------------------------------//
         //      The exact moment the hand reaches the weapon while Sheathing                        //
         //      Sets New Parent to weapon reset ANimations to "out of combat"                       //
@@ -265,11 +442,25 @@ namespace RPG.Character
         {
             if (onWeaponChange == true)
             {
-                ResetWeapon();
+                OnWeaponSwap();
             }                 
         }
 
+        private void Update()
+        {
+            if (Input.GetKey("1"))
+                
+                animator.SetTrigger("Attack");
+                
+            if (Input.GetKey("2"))
+                animator.SetTrigger("UnSeath");
 
+           
+
+        }
     }
-}
     
+  
+
+}
+
