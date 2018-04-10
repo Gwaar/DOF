@@ -102,8 +102,10 @@ public class PlayerMovement : MonoBehaviour
     //}
 
 
-    public void FootR()    {        Debug.Log("R");    }
-    public void FootL()    {        Debug.Log("L");   }
+    public void FootR()    {       // Debug.Log("R");  
+    }
+    public void FootL()    {       // Debug.Log("L");   
+    }
 
 }
 

@@ -119,9 +119,9 @@ public class Enemy : MonoBehaviour, IDamageable
     // Set out fire logic!!!!
     void FireProjectile()
     {
-        print("called");
+        
 
-        animator.SetTrigger("Attack");
+        //animator.SetTrigger("Attack");
 
 
         //GameObject newProjectile = Instantiate(Projectile, ProjectileSocket.transform.position, Quaternion.identity);

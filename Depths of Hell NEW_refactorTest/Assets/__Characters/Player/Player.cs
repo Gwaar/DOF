@@ -10,14 +10,25 @@ using UnityEngine.Assertions;
 using RPG.Weapon;
 
 
+
+using RPG.Characters;
+
 namespace RPG.Character
 {
     public class Player : MonoBehaviour, IDamageable
     {
 
+
         //------------------------------------------------------------------------------------------//
         //          SerializeField                                                                  //
         //------------------------------------------------------------------------------------------// 
+
+
+        //TEMP for debug
+        [SerializeField]
+        SpecialAbility[] abilities;
+
+
 
         [SerializeField]
         float maxHealthpoints = 100f;
@@ -65,19 +76,17 @@ namespace RPG.Character
 
         private void Start()
         {
+           
             ResetAnimController();
             animatorOverrideController["DEFAULT_UNSHEATH_OFFHAND"]  = OffHandWeaponInUse.GetUnSeathAnimation();
-            animatorOverrideController["DEFAULT_UNSHEATH"]          = weaponInUse.GetUnSeathAnimation();
-           
-            SetCurrentMaxHealth();
-          
+            animatorOverrideController["DEFAULT_UNSHEATH"]          = weaponInUse.GetUnSeathAnimation();         
+            SetCurrentMaxHealth();        
             InstantiateInSheath();
-            RegisterForMouseClick();
+            RegisterForMouseClick();          
             animator = GetComponent<Animator>();
             animatorOverrideController["DEFAULT_IDLE"] = null;
 
-           
-
+            abilities[0].AttatchComponentTo(gameObject);
 
 
         }
@@ -225,8 +234,8 @@ namespace RPG.Character
                 SetParentSheath(Sheath, weapon);
                
 
-                animator.SetBool("WeaponSheathed", true);
-                animator.SetBool("WeaponDrawn", false);
+                //animator.SetBool("WeaponSheathed", true);
+                //animator.SetBool("WeaponDrawn", false);
 
 
 
@@ -301,7 +310,7 @@ namespace RPG.Character
             Offhand.transform.localPosition = OffHandWeaponInUse.WeaponGrip.localPosition;
             Offhand.transform.localRotation = OffHandWeaponInUse.WeaponGrip.localRotation;
             Offhand.transform.localScale = OffHandWeaponInUse.WeaponGrip.localScale;
-            print("gotHere!");
+          //  print("gotHere!");
 
         }
 
@@ -348,14 +357,30 @@ namespace RPG.Character
         //------------------------------------------------------------------------------------------//
         void OnOverPotentiallyEnemy(Enemy enemy)
         {
+            if (Input.GetMouseButton(0) && IsTargetinRange(enemy.gameObject))
+            {
 
-            if (Input.GetMouseButtonDown(0))                                        {
-                animator.SetTrigger            ("UnSheath");
-                                                                                    }
+                animator.SetTrigger("UnSheath");
+                AttackTarget(enemy);
+            }else if
+                (Input.GetMouseButtonDown(1))
+                {
+                AttemptSpecialAbility(0, enemy);
+                }
+            }
 
-            if (Input.GetMouseButtonDown(0) && IsTargetinRange(enemy.gameObject))   {
-                AttackTarget                   (enemy);                             }                       
+        private void AttemptSpecialAbility(int abilityIndex , Enemy enemy)
+        {
+            var EnergyComponent = GetComponent<Energy>();
+            if (EnergyComponent.IsEnergyAvailable(10f)) // TODO REMOVE HARDCODED NUMBER
+            {
+                EnergyComponent.ConsumeEnergy(10f); // TODO USE ABILITY!
+                abilities[abilityIndex].Use();
+            }
         }
+
+
+
 
         //------------------------------------------------------------------------------------------//
         //       Checks if target is in Range                                                       //
