@@ -12,6 +12,12 @@ namespace RPG.Character
         [SerializeField]        RawImage            EnergyBar                   = null  ;
         [SerializeField]        float               MaxEnergyPoint              = 100f  ;
 
+
+        [SerializeField]
+        float RegenPointsPerSec = 1f;
+
+
+
         public                  float               currentEnergyPoints;                                   
    
         void Start()
@@ -25,14 +31,12 @@ namespace RPG.Character
 
         public bool IsEnergyAvailable(float amount)
         {
-            print(amount <= currentEnergyPoints);
-            return amount <= currentEnergyPoints;
-
-          
+            return amount <= currentEnergyPoints;       
         }
 
         public void ConsumeEnergy(float amount)
         {
+
             float newEnergyPoint    = currentEnergyPoints - amount;
             currentEnergyPoints     = Mathf.Clamp(newEnergyPoint, 0, MaxEnergyPoint);
             UpdateEnergyBar();
@@ -46,7 +50,28 @@ namespace RPG.Character
         {       
             return currentEnergyPoints / MaxEnergyPoint;
         }
+
+
+
+
+        private void Update()
+        {
+           // UpdateEnergyBar();
+            AddenergyPoints();
+            
+        }
+
+
+
+
+       private void  AddenergyPoints()
+        {
+            float pointsToAdd =  + RegenPointsPerSec * Time.deltaTime;
+            currentEnergyPoints = Mathf.Clamp(currentEnergyPoints + pointsToAdd, 0, MaxEnergyPoint);
+
+        }
     }
+    
 
 
 }

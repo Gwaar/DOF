@@ -18,9 +18,12 @@ namespace RPG.Characters
             this.config = conficToSet;
         }
 
-        public void Use()
+        public void Use(AbilityToUse useParams)
         {
-            print("powerAttackUsed");
+            print("powerAttackUsed by "+ gameObject.name);
+            float damageToDeal = useParams.baseDamage + config.getExtraDamage();
+            useParams.target.TakeDamage(damageToDeal);
+
         }
 
         // Use this for initialization

@@ -27,8 +27,14 @@ namespace UnityStandardAssets.Characters.ThirdPerson
         private void Update()
         {
             if (target != null)
+            {
                 agent.SetDestination(target.position);
-            agent.updateRotation = true;
+                agent.updateRotation = true;
+            }
+            else
+                agent.velocity = Vector3.zero;
+                
+                
 
         }
 

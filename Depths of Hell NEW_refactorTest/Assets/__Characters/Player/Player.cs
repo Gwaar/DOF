@@ -33,7 +33,7 @@ namespace RPG.Character
         [SerializeField]
         float maxHealthpoints = 100f;
         [SerializeField]
-        float DMGpertHit = 9;
+        float baseDamage = 9;
         [SerializeField]
         AnimatorOverrideController animatorOverrideController = null;
         [SerializeField]
@@ -372,10 +372,14 @@ namespace RPG.Character
         private void AttemptSpecialAbility(int abilityIndex , Enemy enemy)
         {
             var EnergyComponent = GetComponent<Energy>();
-            if (EnergyComponent.IsEnergyAvailable(10f)) // TODO REMOVE HARDCODED NUMBER
+            var EnergyCost = abilities[abilityIndex].GetEnergyCost();
+
+            if (EnergyComponent.IsEnergyAvailable(EnergyCost)) // TODO REMOVE HARDCODED NUMBER
             {
-                EnergyComponent.ConsumeEnergy(10f); // TODO USE ABILITY!
-                abilities[abilityIndex].Use();
+                EnergyComponent.ConsumeEnergy(EnergyCost); // TODO USE ABILITY!
+
+                var abilityPerams = new AbilityToUse(enemy, baseDamage);
+                abilities[abilityIndex].Use(abilityPerams);
             }
         }
 
@@ -409,7 +413,7 @@ namespace RPG.Character
             if (Time.time - LastHitTime > weaponInUse.GetMinTimeBetweenHits())
             {
                 animator.SetTrigger ("Attack");
-                enemy.TakeDamage    (DMGpertHit);
+                enemy.TakeDamage    (baseDamage);
 
                 LastHitTime = Time.time;
             }
