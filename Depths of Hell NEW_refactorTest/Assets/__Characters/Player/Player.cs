@@ -76,7 +76,7 @@ namespace RPG.Character
 
         private void Start()
         {
-           
+            animatorOverrideController["DEFAULT_UNSHEATH"] = null;
             ResetAnimController();
             animatorOverrideController["DEFAULT_UNSHEATH_OFFHAND"]  = OffHandWeaponInUse.GetUnSeathAnimation();
             animatorOverrideController["DEFAULT_UNSHEATH"]          = weaponInUse.GetUnSeathAnimation();         
@@ -85,7 +85,7 @@ namespace RPG.Character
             RegisterForMouseClick();          
             animator = GetComponent<Animator>();
             animatorOverrideController["DEFAULT_IDLE"] = null;
-
+        
             abilities[0].AttatchComponentTo(gameObject);
 
 
@@ -177,6 +177,8 @@ namespace RPG.Character
             animatorOverrideController["DEFAULT_IDLE"] = null;
             animatorOverrideController["DEFAULT_WALK"] = null;
             animatorOverrideController["DEFAULT_RUN"] = null;
+          
+
         }
         //------------------------------------------------------------------------------------------//
         //      Instaniate Weapon in Hand  & Set Parent to Hanb                                           //

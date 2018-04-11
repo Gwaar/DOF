@@ -12,8 +12,7 @@ MonoBehaviour:
   m_Name: 2hand-Bow
   m_EditorClassIdentifier: 
   isLeftHand: 1
-  isMainHand: 0
-  isOffhand: 0
+  isOneHand: 0
   WeaponGrip: {fileID: 4214445089658944, guid: a38eed7a88493ad4f878b6f3591a0c80, type: 2}
   SheathTransform: {fileID: 4795577198521860, guid: b6e1cf9cd1fe4554ea420071ef868e4f,
     type: 2}
@@ -25,4 +24,4 @@ MonoBehaviour:
   WalkAnimation: {fileID: 7400000, guid: 0ddeadfa9fe0f9b4293bbb380f9aa884, type: 3}
   RunAnimation: {fileID: 7400000, guid: f8e0a3512fe05e240bf9d4cff6d8fc26, type: 3}
   SeathAnimation: {fileID: 7400000, guid: 7b29b750b13c2764aaf3c057976a752e, type: 3}
-  UnSheathAnimation: {fileID: 0}
+  UnSheathAnimation: {fileID: 7400000, guid: fa43b8e3a4edbaf4588b0a302e16c0f6, type: 3}
