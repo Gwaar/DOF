@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityStandardAssets.Characters.ThirdPerson;
+using RPG.Character;
 public class Enemy : MonoBehaviour, IDamageable
 {
 
@@ -18,6 +19,9 @@ public class Enemy : MonoBehaviour, IDamageable
     float SecBetweenShots = 2f;
     [SerializeField]
     float maxHealthpoints = 100f;
+
+[SerializeField] float veriation = 1f ;
+ 
 
 
 
@@ -54,7 +58,7 @@ public class Enemy : MonoBehaviour, IDamageable
     ThirdPersonCharacter thirdPersonCharacter = null;
     AICharacterControl aiCharacterControl = null;
 
-    GameObject player = null;
+    Player player = null;
 
     public float healthAsPercentage { get { return currenthHealthPoints / (maxHealthpoints); } }
 
@@ -71,21 +75,31 @@ public class Enemy : MonoBehaviour, IDamageable
         currenthHealthPoints = maxHealthpoints;
         aiCharacterControl = GetComponent<AICharacterControl>();
         thirdPersonCharacter = GetComponent<ThirdPersonCharacter>();
-        player = GameObject.FindGameObjectWithTag("Player");
-
-       
+        player = FindObjectOfType<Player>();
     }
 
     void Update()
     {
+
+
+        if (player.healthAsPercentage<= Mathf.Epsilon){
+            StopAllCoroutines();
+            Destroy(this);
+        }
         float distanceToPlayer = Vector3.Distance(player.transform.position, transform.position);
         if (distanceToPlayer <= attackRadius && !isAttacking)
         {
 
             
             //animatorOverrideController["DEFAULT_ATTACK"] = enemyWeapon.GetCombatState_AttackAnimation();
-            //isAttacking = true;
-            InvokeRepeating("FireProjectile", 1f, SecBetweenShots);
+
+
+            
+
+            float RandomDelay = Random.Range(SecBetweenShots - veriation , SecBetweenShots + SecBetweenShots);
+
+            isAttacking = true;
+            InvokeRepeating("FireProjectile", 1f,RandomDelay);
            
 
         }
@@ -121,16 +135,15 @@ public class Enemy : MonoBehaviour, IDamageable
     {
         
 
-        //animator.SetTrigger("Attack");
 
 
-        //GameObject newProjectile = Instantiate(Projectile, ProjectileSocket.transform.position, Quaternion.identity);
-        //Projectile projectileComponent = newProjectile.GetComponent<Projectile>();
-        //projectileComponent.SetShooter(gameObject);
-        //projectileComponent.damageCaused = DMGperShot;
-        //Vector3 unitVectorToPlayer = (player.transform.position + aimOffset - ProjectileSocket.transform.position).normalized;
-        //float projectileSpeed = projectileComponent.GetDefaultLaunchSpeed();
-        //newProjectile.GetComponent<Rigidbody>().velocity = unitVectorToPlayer * projectileSpeed;
+        GameObject newProjectile = Instantiate(Projectile, ProjectileSocket.transform.position, Quaternion.identity);
+        Projectile projectileComponent = newProjectile.GetComponent<Projectile>();
+        projectileComponent.SetShooter(gameObject);
+        projectileComponent.damageCaused = DMGperShot;
+        Vector3 unitVectorToPlayer = (player.transform.position + aimOffset - ProjectileSocket.transform.position).normalized;
+        float projectileSpeed = projectileComponent.GetDefaultLaunchSpeed();
+        newProjectile.GetComponent<Rigidbody>().velocity = unitVectorToPlayer * projectileSpeed;
     }
     private void IdleState_OverrideWeaponAnimatorController()
     {

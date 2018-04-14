@@ -9,7 +9,7 @@ using UnityEngine.AI;
 using UnityEngine.Assertions;
 using RPG.Weapon;
 
-
+using UnityEngine.SceneManagement;
 
 using RPG.Characters;
 
@@ -18,7 +18,7 @@ namespace RPG.Character
     public class Player : MonoBehaviour, IDamageable
     {
 
-
+       
         //------------------------------------------------------------------------------------------//
         //          SerializeField                                                                  //
         //------------------------------------------------------------------------------------------// 
@@ -30,8 +30,19 @@ namespace RPG.Character
 
 
 
+
+       
+[SerializeField] AudioClip[] damageSounds;
+[SerializeField] AudioClip[] deathsounds;
+
+bool firsttime = false;
         [SerializeField]
         float maxHealthpoints = 100f;
+
+
+       
+       
+
         [SerializeField]
         float baseDamage = 9;
         [SerializeField]
@@ -40,6 +51,23 @@ namespace RPG.Character
         Weapon.Weapon weaponInUse = null;
         [SerializeField]
         Weapon.Weapon OffHandWeaponInUse = null;
+    
+        const string DEATH_TRIGGER = "Death";
+        const string ATTACK_TRIGGER = "Attack";
+         const string DEFAULT_IDLE = "DEFAULT_IDLE";
+         const string DEFAULT_ATTACK = "DEFAULT_ATTACK";
+
+        const string DEFAULT_WALK = "DEFAULT_WALK";
+        const string DEFAULT_RUN = "DEFAULT_RUN";
+
+        const string DEFAULT_SHEATH = "DEFAULT_SHEATH";
+
+         const string DEFAULT_UNSHEATH = "DEFAULT_UNSHEATH";
+
+         
+
+
+       const string DEFAULT_UNSHEATH_OFFHAND = "DEFAULT_UNSHEATH_OFFHAND";
 
 
         //------------------------------------------------------------------------------------------//
@@ -62,13 +90,14 @@ namespace RPG.Character
 
         CameraRaycaster cameraRaycaster;
         AnimationEvent ae = new AnimationEvent();
+        
         float currenthHealthPoints;
 
         Animator animator;
 
 
         bool OffHandUnsheath = false;
-        bool mainHandUnSheath = true;
+        bool mainHandUnSheath = false;
 
         //------------------------------------------------------------------------------------------//
         //        Sets Health, ResetAnimarions, Instansiate Weapon in Sheath, sets Idle Animation   //
@@ -76,19 +105,26 @@ namespace RPG.Character
 
         private void Start()
         {
-            animatorOverrideController["DEFAULT_UNSHEATH"] = null;
+            
+            
             ResetAnimController();
-            animatorOverrideController["DEFAULT_UNSHEATH_OFFHAND"]  = OffHandWeaponInUse.GetUnSeathAnimation();
-            animatorOverrideController["DEFAULT_UNSHEATH"]          = weaponInUse.GetUnSeathAnimation();         
+            
+         
+                   
             SetCurrentMaxHealth();        
-            InstantiateInSheath();
+            //InstantiateInSheath();
             RegisterForMouseClick();          
             animator = GetComponent<Animator>();
             animatorOverrideController["DEFAULT_IDLE"] = null;
-        
+          
             abilities[0].AttatchComponentTo(gameObject);
+            
+         animatorOverrideController[DEFAULT_UNSHEATH]          = weaponInUse.GetUnSeathAnimation(); 
 
 
+            
+
+                
         }
         private void SetCurrentMaxHealth()
         {
@@ -105,11 +141,11 @@ namespace RPG.Character
 
             if (weaponInUse.isOneHand == false)
             {
-                animatorOverrideController["DEFAULT_ATTACK"] = weaponInUse.GetAttackAnimClip();
-                animatorOverrideController["DEFAULT_IDLE"] = weaponInUse.GetIdleAnimClip();
-                animatorOverrideController["DEFAULT_WALK"] = weaponInUse.GetWalkAnimClip();
-                animatorOverrideController["DEFAULT_RUN"] = weaponInUse.GetRunAnimClip();
-                animatorOverrideController["DEFAULT_SHEATH"] = weaponInUse.GetSeathAnimation();
+                animatorOverrideController[DEFAULT_ATTACK]      =   weaponInUse.GetAttackAnimClip()     ;
+                animatorOverrideController[DEFAULT_IDLE]        =   weaponInUse.GetIdleAnimClip()       ;
+                animatorOverrideController[DEFAULT_WALK]        =   weaponInUse.GetWalkAnimClip()       ;
+                animatorOverrideController[DEFAULT_RUN]         =   weaponInUse.GetRunAnimClip()        ;
+                animatorOverrideController[DEFAULT_SHEATH]      =   weaponInUse.GetSheathAnimation()    ;
 
             }
             else
@@ -120,13 +156,13 @@ namespace RPG.Character
 
                     print("mainHandAnims!");
 
-                    animatorOverrideController["DEFAULT_ATTACK"] = weaponInUse.GetAttackAnimClip();
-                    animatorOverrideController["DEFAULT_IDLE"] = weaponInUse.GetIdleAnimClip();
-                    animatorOverrideController["DEFAULT_WALK"] = weaponInUse.GetWalkAnimClip();
-                    animatorOverrideController["DEFAULT_RUN"] = weaponInUse.GetRunAnimClip();
-              //      animatorOverrideController["DEFAULT_SHEATH"] = weaponInUse.GetSeathAnimation();
-                    animatorOverrideController["DEFAULT_UNSHEATH_OFFHAND"] = OffHandWeaponInUse.GetUnSeathAnimation();
-                    animatorOverrideController["DEFAULT_UNSHEATH"] = weaponInUse.GetUnSeathAnimation();
+                    animatorOverrideController[DEFAULT_ATTACK] = weaponInUse.GetAttackAnimClip();
+                    animatorOverrideController[DEFAULT_IDLE] = weaponInUse.GetIdleAnimClip();
+                    animatorOverrideController[DEFAULT_WALK] = weaponInUse.GetWalkAnimClip();
+                    animatorOverrideController[DEFAULT_RUN] = weaponInUse.GetRunAnimClip();
+              //      animatorOverrideController[DEFAULT_SHEATH] = weaponInUse.GetSeathAnimation();
+                    animatorOverrideController[DEFAULT_UNSHEATH_OFFHAND] = OffHandWeaponInUse.GetUnSeathAnimation();
+                    animatorOverrideController[DEFAULT_UNSHEATH] = weaponInUse.GetUnSeathAnimation();
 
                     mainHandUnSheath = false;
                 }
@@ -139,12 +175,12 @@ namespace RPG.Character
                     {
                         print("offhandAnims");
                     //    ResetAnimController();
-                        animatorOverrideController["DEFAULT_ATTACK"] = OffHandWeaponInUse.GetAttackAnimClip();
-                        animatorOverrideController["DEFAULT_IDLE"] = OffHandWeaponInUse.GetIdleAnimClip();
-                        animatorOverrideController["DEFAULT_WALK"] = OffHandWeaponInUse.GetWalkAnimClip();
-                        animatorOverrideController["DEFAULT_RUN"] = OffHandWeaponInUse.GetRunAnimClip();
-                        animatorOverrideController["DEFAULT_UNSHEATH"] = OffHandWeaponInUse.GetUnSeathAnimation();
-                        animatorOverrideController["DEFAULT_UNSHEATH_OFFHAND"] = OffHandWeaponInUse.GetUnSeathAnimation();
+                   
+                        animatorOverrideController[DEFAULT_IDLE] = OffHandWeaponInUse.GetIdleAnimClip();
+                        animatorOverrideController[DEFAULT_WALK] = OffHandWeaponInUse.GetWalkAnimClip();
+                        animatorOverrideController[DEFAULT_RUN] = OffHandWeaponInUse.GetRunAnimClip();
+                        animatorOverrideController[DEFAULT_UNSHEATH] = OffHandWeaponInUse.GetUnSeathAnimation();
+                        animatorOverrideController[DEFAULT_UNSHEATH_OFFHAND] = OffHandWeaponInUse.GetUnSeathAnimation();
                         //       animatorOverrideController["DEFAULT_SHEATH"] = OffHandWeaponInUse.GetSeathAnimation();
 
 
@@ -156,14 +192,18 @@ namespace RPG.Character
 
             }
 
-        
-         
-
-
-
 
         }
 
+        private void ChangeAnimation (AnimationClip anim) {
+            animatorOverrideController[DEFAULT_ATTACK] = anim;
+            animatorOverrideController[DEFAULT_IDLE] = anim;
+            animatorOverrideController[DEFAULT_WALK] = anim;
+            animatorOverrideController[DEFAULT_RUN] = anim;
+            animatorOverrideController[DEFAULT_SHEATH] = anim;
+        }
+
+   
 
         //------------------------------------------------------------------------------------------//
         //       Reset Animation Controller to "out of combat" Animations                           //
@@ -173,13 +213,20 @@ namespace RPG.Character
             var animator = GetComponent<Animator>();
             animator.runtimeAnimatorController = animatorOverrideController;
 
-            animatorOverrideController["DEFAULT_ATTACK"] = null;
-            animatorOverrideController["DEFAULT_IDLE"] = null;
-            animatorOverrideController["DEFAULT_WALK"] = null;
-            animatorOverrideController["DEFAULT_RUN"] = null;
+            animatorOverrideController[DEFAULT_ATTACK] = null;
+            animatorOverrideController[DEFAULT_IDLE] = null;
+            animatorOverrideController[DEFAULT_WALK] = null;
+            animatorOverrideController[DEFAULT_RUN] = null;
           
 
         }
+
+        
+
+
+        // private void WeaponSwap(Weapon weapon,AnimationClip animclip){
+
+        // }
         //------------------------------------------------------------------------------------------//
         //      Instaniate Weapon in Hand  & Set Parent to Hanb                                           //
         //------------------------------------------------------------------------------------------//
@@ -203,7 +250,10 @@ namespace RPG.Character
 
         private void InstantiateInSheath()
         {
+            if (firsttime == false){
 
+
+            
             if (weaponInUse.isOneHand == false)
             {
                 var weaponPrefab = weaponInUse.GetWeaponPreFab();
@@ -234,19 +284,13 @@ namespace RPG.Character
 
                 SetParentSheathOffHand(Sheath, offhand);
                 SetParentSheath(Sheath, weapon);
-               
+            
 
-                //animator.SetBool("WeaponSheathed", true);
-                //animator.SetBool("WeaponDrawn", false);
-
-
+                }
 
 
             }
-
-
-
-
+        
         }
 
         //------------------------------------------------------------------------------------------//
@@ -267,8 +311,8 @@ namespace RPG.Character
                 ResetAnimController();
                 Destroy(_weapon);
                 Destroy(_OffHand);
-                InstantiateInSheath();
-                InstantiateInSheath();
+               InstantiateInSheath();
+               InstantiateInSheath();
             }
 
         }
@@ -361,15 +405,21 @@ namespace RPG.Character
         {
             if (Input.GetMouseButton(0) && IsTargetinRange(enemy.gameObject))
             {
+            animatorOverrideController["DEFAULT_ATTACK"] = weaponInUse.GetAttackAnimClip();
+                animator.SetTrigger(DEFAULT_ATTACK);
 
-                animator.SetTrigger("UnSheath");
+                
                 AttackTarget(enemy);
             }else if
                 (Input.GetMouseButtonDown(1))
                 {
                 AttemptSpecialAbility(0, enemy);
                 }
-            }
+        }
+
+
+
+
 
         private void AttemptSpecialAbility(int abilityIndex , Enemy enemy)
         {
@@ -404,7 +454,30 @@ namespace RPG.Character
         public float       healthAsPercentage  {get {return currenthHealthPoints/(maxHealthpoints);}}
         public      void        TakeDamage          (float damage)
         {
-            currenthHealthPoints        = Mathf.Clamp(currenthHealthPoints - damage, 0f, maxHealthpoints);
+              ReduceHealth(damage);
+              bool playerDies = (currenthHealthPoints - damage <= 0);
+            if  (playerDies)
+            {             
+                StartCoroutine(KillPlayer());
+                animator.SetTrigger(DEATH_TRIGGER);
+                //play deathsound
+              
+               
+
+            }
+        }
+
+        IEnumerator KillPlayer()
+        {
+                print("Deathsound");
+                print("death animation");
+                yield return new WaitForSeconds(2f);
+                SceneManager.LoadScene(0);
+        }
+
+        private void ReduceHealth(float damage)
+        {
+                         currenthHealthPoints        = Mathf.Clamp(currenthHealthPoints - damage, 0f, maxHealthpoints);
         }
 
         //------------------------------------------------------------------------------------------//
@@ -416,7 +489,6 @@ namespace RPG.Character
             {
                 animator.SetTrigger ("Attack");
                 enemy.TakeDamage    (baseDamage);
-
                 LastHitTime = Time.time;
             }
         }
@@ -426,6 +498,7 @@ namespace RPG.Character
         //------------------------------------------------------------------------------------------//
         public void UnSheathMoment()
         {
+
             
             OverrideWeaponAnimatorController();
 
@@ -486,12 +559,34 @@ namespace RPG.Character
             if (Input.GetKey("2"))
                 animator.SetTrigger("UnSeath");
 
-           
-
         }
+
     }
     
   
 
 }
 
+
+
+
+
+//On weapon change
+    // null animation
+    // SHeathsTrigger
+    // Sheah notffyer, change paernt
+    // AnimationOverride
+    // SHeath
+    //nullAnimations
+    //SHeatch parent
+    //destroy weapon
+    // change weapon
+    // loop.
+
+    //get animation from weapon
+
+    //If weapon is unsheath
+        //Animations = weapons animations
+    
+    //If weapon is sheath
+        //Animations = null

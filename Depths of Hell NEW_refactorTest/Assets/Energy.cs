@@ -9,7 +9,7 @@ namespace RPG.Character
 {
     public class Energy : MonoBehaviour
     {
-        [SerializeField]        RawImage            EnergyBar                   = null  ;
+        [SerializeField]        Image            EnergyOrb                   = null  ;
         [SerializeField]        float               MaxEnergyPoint              = 100f  ;
 
 
@@ -43,8 +43,7 @@ namespace RPG.Character
         }
         private void UpdateEnergyBar()
         {         
-            float xValue        =           -(EnergyAsProcent() / 2f) - 0.5f;
-            EnergyBar.uvRect    = new       Rect(xValue, 0f, 0.5f, 1f);
+            EnergyOrb.fillAmount =EnergyAsProcent();
         }
         float       EnergyAsProcent()
         {       
