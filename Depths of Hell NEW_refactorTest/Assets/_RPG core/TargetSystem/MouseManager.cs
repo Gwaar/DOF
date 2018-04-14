@@ -50,26 +50,26 @@ public class MouseManager : MonoBehaviour {
         Renderer[] rs = selectedObject.GetComponentsInChildren<Renderer>();
 
 
-        foreach (Renderer r in rs)
-        {
-            Material m = r.material;
+        // foreach (Renderer r in rs)
+        // {
+        //     // Material m = r.material;
 
-            m.color = Color.grey;
-            r.material = m;
-        }
+        //     // m.color = Color.grey;
+        //     // r.material = m;
+        // }
     }
 
     void ClearSelection()
     {
         if (selectedObject == null)
             return;
-        Renderer[] rs = selectedObject.GetComponentsInChildren<Renderer>();
-        foreach (Renderer r in rs)
-        {
-            Material m = r.material;
-            m.color = Color.white;
-            r.material = m;
-        }
+        // Renderer[] rs = selectedObject.GetComponentsInChildren<Renderer>();
+        // foreach (Renderer r in rs)
+        // {
+        //     // Material m = r.material;
+        //     // m.color = Color.white;
+        //     // r.material = m;
+        // }
         selectedObject = null;
     }
 }

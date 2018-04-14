@@ -72,7 +72,7 @@ public class PlayerMovement : MonoBehaviour
     private void Update()
     {
         
-            animator.SetTrigger("Seath");
+            animator.SetTrigger("Sheath");
        // playerSpeed = WalkSpeed;
         playerSpeed =  animator.GetFloat("SpeedProcent");
 

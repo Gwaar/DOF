@@ -16,6 +16,13 @@ public class CameraRaycaster : MonoBehaviour
     [SerializeField]    Texture2D   targetCursor    = null               ;
     [SerializeField]    Texture2D   walkCursor      = null               ;
     [SerializeField]    Vector2     cursorHotspot   = new Vector2(96, 96);
+
+
+
+
+    public bool clickedEnemy = false;
+
+    
     //------------------------------------------------------------------------------------------//
     //      Constants                                                                           //
     //------------------------------------------------------------------------------------------//
@@ -24,6 +31,8 @@ public class CameraRaycaster : MonoBehaviour
     const int   POTENTIALLY_ENEMY_LAYER_NUMBER      = 9 ;
 
 
+
+    Rect screenRectOnPlay = new Rect (0,0,Screen.width,Screen.height);
     //------------------------------------------------------------------------------------------//
     //     Layer Prios                                                                          //
     //------------------------------------------------------------------------------------------//
@@ -54,10 +63,17 @@ public class CameraRaycaster : MonoBehaviour
 
     void PreforemRayCasts()
     {
+
+        if (screenRectOnPlay.Contains(Input.mousePosition)){
+
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         if (RaycastForEnemy     (ray)) {    return; }
         if (RaycastForPotentionallyWalkable(ray)) { return; }
 
+
+
+        }
+        
     }
 
      bool RaycastForEnemy(Ray ray)
@@ -71,9 +87,15 @@ public class CameraRaycaster : MonoBehaviour
         {
             Cursor.SetCursor(targetCursor, cursorHotspot, CursorMode.Auto);
             onOverPotentiallyEnemy(enemyHit);
+            clickedEnemy = true;
+            print(clickedEnemy);
             return true;
         }
+
+         clickedEnemy = false;
+         print(clickedEnemy);
         return false;
+       
     }
     //------------------------------------------------------------------------------------------//
     //     Check if target is Walkable                                                          //
